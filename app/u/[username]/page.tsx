@@ -1,13 +1,12 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, cardCls } from "@/lib/ui";
 
-export default async function PublicProfilePage({
-  params,
-}: {
-  params: Promise<{ username: string }>;
-}) {
+async function ProfileContent({ params }: { params: Promise<{ username: string }> }) {
+  await connection();
   const { username } = await params;
   const supabase = await createClient();
 
@@ -22,7 +21,7 @@ export default async function PublicProfilePage({
   const initials = (profile.full_name ?? profile.username).slice(0, 2).toUpperCase();
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-4 p-6">
+    <>
       <div className="mt-6 flex flex-col items-center gap-2">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-3xl font-extrabold text-primary-foreground">
           {initials}
@@ -60,6 +59,20 @@ export default async function PublicProfilePage({
           Crée ton lien anonyme
         </Link>
       </section>
+    </>
+  );
+}
+
+export default function PublicProfilePage({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  return (
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-4 p-6">
+      <Suspense fallback={<p className="mt-10 text-center text-muted-foreground">Chargement…</p>}>
+        <ProfileContent params={params} />
+      </Suspense>
     </main>
   );
 }
