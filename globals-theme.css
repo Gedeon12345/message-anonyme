@@ -1,0 +1,14 @@
+/* À coller tout à la fin de app/globals.css */
+:root {
+  --background: #ffd400;
+  --foreground: #1a1033;
+  --card: #ffffff;
+  --card-foreground: #1a1033;
+  --primary: #e6007a;
+  --primary-foreground: #ffffff;
+  --secondary: #6a2cf5;
+  --secondary-foreground: #ffffff;
+  --muted-foreground: #4a4266;
+  --border: #b8aedc;
+  --radius: 1rem;
+}
